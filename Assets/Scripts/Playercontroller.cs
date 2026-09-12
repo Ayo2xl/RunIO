@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayercontrollerScript : MonoBehaviour
+public class Playercontroller : MonoBehaviour
 {
     private Rigidbody2D Player2drb;
     public InputAction jumpMovement;
     public float jumpForce = 10f;
     public float gravityModifier;
     public bool isGrounded = true;
+    public bool gameOver;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +31,11 @@ public class PlayercontrollerScript : MonoBehaviour
         if(collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+        else if(collision.gameObject.CompareTag("Obstacles"))
+        {
+            Debug.Log("Game Over");
+            gameOver = true;
         }
     }
 }
