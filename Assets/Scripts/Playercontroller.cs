@@ -1,41 +1,62 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Playercontroller : MonoBehaviour
 {
-    private Rigidbody2D Player2drb;
-    public InputAction jumpMovement;
-    public float jumpForce = 10f;
-    public float gravityModifier;
+    public float jumpHeight = 2f;
+    public float jumpDuration = 0.6f;
     public bool isGrounded = true;
     public bool gameOver;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Vector3 startPos;
+    private bool isJumping = false;
+    private float jumpTimer = 0f;
+    private Animator anim;
+
     void Start()
     {
-        Player2drb = GetComponent<Rigidbody2D>();
-        jumpMovement.Enable();
-        Player2drb.gravityScale *= gravityModifier;
+        startPos = transform.position;
+        anim = GetComponentInChildren<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(jumpMovement.triggered && isGrounded)
+        if (gameOver) return; // stop all further input/movement once game is over
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
         {
-            Player2drb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            isJumping = true;
             isGrounded = false;
+            jumpTimer = 0f;
+        }
+
+        if (isJumping)
+        {
+            jumpTimer += Time.deltaTime;
+            float progress = jumpTimer / jumpDuration;
+
+            if (progress >= 1f)
+            {
+                progress = 1f;
+                isJumping = false;
+                isGrounded = true;
+            }
+
+            float heightOffset = jumpHeight * 4 * progress * (1 - progress);
+            transform.position = new Vector3(startPos.x, startPos.y + heightOffset, startPos.z);
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision){
-        if(collision.gameObject.CompareTag("Ground"))
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
         }
-        else if(collision.gameObject.CompareTag("Obstacles"))
+        else if (collision.gameObject.CompareTag("Obstacles"))
         {
             Debug.Log("Game Over");
             gameOver = true;
+            if (anim != null) anim.enabled = false; // freeze her animation on the hit frame
         }
     }
 }
