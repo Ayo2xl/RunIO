@@ -6,7 +6,10 @@ public class Playercontroller : MonoBehaviour
     public float jumpDuration = 0.6f;
     public bool isGrounded = true;
     public bool gameOver;
-
+    public ParticleSystem explosionParticle;
+    private AudioSource playerAudio;
+    public AudioClip jumpSound;
+    public AudioClip crashSound;
     private Vector3 startPos;
     private bool isJumping = false;
     private float jumpTimer = 0f;
@@ -16,6 +19,7 @@ public class Playercontroller : MonoBehaviour
     {
         startPos = transform.position;
         anim = GetComponentInChildren<Animator>();
+        playerAudio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -27,12 +31,15 @@ public class Playercontroller : MonoBehaviour
             isJumping = true;
             isGrounded = false;
             jumpTimer = 0f;
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
         }
 
         if (isJumping)
         {
             jumpTimer += Time.deltaTime;
             float progress = jumpTimer / jumpDuration;
+            
+
 
             if (progress >= 1f)
             {
@@ -55,8 +62,10 @@ public class Playercontroller : MonoBehaviour
         else if (collision.gameObject.CompareTag("Obstacles"))
         {
             Debug.Log("Game Over");
+            explosionParticle.Play();
             gameOver = true;
             if (anim != null) anim.enabled = false; // freeze her animation on the hit frame
+            playerAudio.PlayOneShot(crashSound, 1.0f);
         }
     }
 }

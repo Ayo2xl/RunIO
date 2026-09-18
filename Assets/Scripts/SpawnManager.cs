@@ -5,7 +5,7 @@ public class SpawnManagerScript : MonoBehaviour
     public GameObject obstaclePrefab;
     private Vector3 spawnPos = new Vector3(12.53f, 1.29f,11.76f);
     private float startDelay = 2;
-    private float repeatRate = 3;
+    private float repeatRate = 1.5f;
     private Playercontroller playerControllerScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
