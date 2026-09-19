@@ -1,11 +1,16 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour
 {
     public float jumpHeight = 2f;
     public float jumpDuration = 0.6f;
+    public TextMeshProUGUI gameOverText;
     public bool isGrounded = true;
     public bool gameOver;
+    public Button restartButton;
     public ParticleSystem explosionParticle;
     private AudioSource playerAudio;
     public AudioClip jumpSound;
@@ -66,6 +71,16 @@ public class Playercontroller : MonoBehaviour
             gameOver = true;
             if (anim != null) anim.enabled = false; // freeze her animation on the hit frame
             playerAudio.PlayOneShot(crashSound, 1.0f);
+            GameOver();
+            restartButton.gameObject.SetActive(true);
         }
+    }
+    public void GameOver()
+    {
+        gameOverText.gameObject.SetActive(true);
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
