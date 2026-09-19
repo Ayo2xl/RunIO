@@ -11,6 +11,7 @@ public class Playercontroller : MonoBehaviour
     public bool isGrounded = true;
     public bool gameOver;
     public Button restartButton;
+    public Button exitButton;
     public ParticleSystem explosionParticle;
     private AudioSource playerAudio;
     public AudioClip jumpSound;
@@ -73,6 +74,7 @@ public class Playercontroller : MonoBehaviour
             playerAudio.PlayOneShot(crashSound, 1.0f);
             GameOver();
             restartButton.gameObject.SetActive(true);
+            exitButton.gameObject.SetActive(true);
         }
     }
     public void GameOver()
@@ -82,5 +84,9 @@ public class Playercontroller : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
