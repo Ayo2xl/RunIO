@@ -10,15 +10,15 @@ public class RepeatBackground : MonoBehaviour
     void Start()
     {
         startPos = transform.position;
-        repeatWidth = GetComponent<BoxCollider2D>().size.x / 2;
+        repeatWidth = GetComponent<BoxCollider2D>().size.x / 2; // Set the repeat width to half the background's width
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x < - repeatWidth)
+        if(transform.position.x < - repeatWidth) // Check if the background has moved past half its width
         {
-            transform.position = startPos;
+            transform.position = startPos; // Reset the background to its starting position
         }
     }
 }

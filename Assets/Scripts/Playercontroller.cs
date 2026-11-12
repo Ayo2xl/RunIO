@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour
 {
-    public float jumpHeight = 2f;
-    public float jumpDuration = 0.6f;
-    public TextMeshProUGUI gameOverText;
-    public bool isGrounded = true;
-    public bool gameOver;
+    public float jumpHeight = 2f; // The height the player will jump to
+    public float jumpDuration = 0.6f; // The duration of the jump
+    public TextMeshProUGUI gameOverText; // The text to display when the game is over
+    public bool isGrounded = true; // Indicates if the player is on the ground
+    public bool gameOver; // Indicates if the game is over
     public Button restartButton;
     public Button exitButton;
     public ParticleSystem explosionParticle;
@@ -21,18 +21,18 @@ public class Playercontroller : MonoBehaviour
     private float jumpTimer = 0f;
     private Animator anim;
 
-    void Start()
+    void Start() // this run when the scene starts
     {
         startPos = transform.position;
         anim = GetComponentInChildren<Animator>();
         playerAudio = GetComponent<AudioSource>();
     }
 
-    void Update()
+    void Update() // this run every frame and updates the player's position
     {
         if (gameOver) return; // stop all further input/movement once game is over
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping) // Check if the space key is pressed and the player is grounded and not already jumping
         {
             isJumping = true;
             isGrounded = false;
@@ -42,19 +42,19 @@ public class Playercontroller : MonoBehaviour
 
         if (isJumping)
         {
-            jumpTimer += Time.deltaTime;
-            float progress = jumpTimer / jumpDuration;
-            
+            jumpTimer += Time.deltaTime; // Update the jump timer with the time elapsed since the last frame
+            float progress = jumpTimer / jumpDuration; // Calculate the progress of the jump as a fraction of the jump duration
+            //time.delta is the time elapsed since the last frame it makes the movement speed the same reardless of frame rate 
 
 
-            if (progress >= 1f)
+            if (progress >= 1f) // Check if the jump has completed
             {
-                progress = 1f;
-                isJumping = false;
-                isGrounded = true;
+                progress = 1f; // Set the progress to 1 to indicate the jump is complete
+                isJumping = false; // Mark the jump as no longer in progress
+                isGrounded = true; // Mark the player as grounded again
             }
 
-            float heightOffset = jumpHeight * 4 * progress * (1 - progress);
+            float heightOffset = jumpHeight * 4 * progress * (1 - progress); // Calculate the height offset for the jump arc
             transform.position = new Vector3(startPos.x, startPos.y + heightOffset, startPos.z);
         }
     }
@@ -79,11 +79,11 @@ public class Playercontroller : MonoBehaviour
     }
     public void GameOver()
     {
-        gameOverText.gameObject.SetActive(true);
+        gameOverText.gameObject.SetActive(true); // Display the game over text
     }
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene to restart the game
     }
     public void ExitGame()
     {
